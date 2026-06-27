@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Manage Perfumes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-add {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #4338ca;
+        }
+
+        .btn-back {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn-back:hover {
+            background: #d1d5db;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #eee;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #d97706;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        .stock-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #111827;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>Manage Perfumes</h1>
+        <div style="display:flex; gap:10px;">
+            <a th:href="@{/admin}" class="btn btn-back">← Dashboard</a>
+            <a th:href="@{/admin/perfumes/add}" class="btn btn-add">+ Add Perfume</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Size</th>
+                <th>Gender</th>
+                <th>Stock</th>
+                <th style="width: 180px;">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(perfumes)}">
+                <td colspan="9" class="empty">No perfume data available.</td>
+            </tr>
+
+            <tr th:each="perfume : ${perfumes}">
+                <td>
+                    <img th:src="${perfume.imageUrl}" alt="Perfume Image">
+                </td>
+                <td th:text="${perfume.name}">Perfume Name</td>
+                <td th:text="${perfume.brand != null ? perfume.brand.name : '-'}">Brand</td>
+                <td th:text="${perfume.category != null ? perfume.category.name : '-'}">Category</td>
+                <td class="price" th:text="'Rp ' + ${perfume.price}">Rp 0</td>
+                <td th:text="${perfume.sizeMl != null ? perfume.sizeMl + ' ml' : '-'}">100 ml</td>
+                <td th:text="${perfume.gender != null ? perfume.gender : '-'}">Unisex</td>
+                <td>
+                    <span class="stock-badge" th:text="${perfume.stock}">0</span>
+                </td>
+                <td>
+                    <div class="action-group">
+                        <a th:href="@{/admin/perfumes/edit/{id}(id=${perfume.id})}" class="btn btn-edit">Edit</a>
+
+                        <a th:href="@{/admin/perfumes/delete/{id}(id=${perfume.id})}"
+                        onclick="return confirm('Yakin ingin menghapus parfum ini?')"
+                        class="btn btn-delete">
+                            Delete
+                        </a>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tambah Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<div class="max-w-2xl mx-auto py-10 px-4">
+    <div class="bg-white rounded-xl shadow p-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Tambah Category</h1>
+        <p class="text-gray-500 mb-6">Masukkan nama category parfum</p>
+
+        <form th:action="@{/admin/categories/save}" th:object="${category}" method="post" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Category</label>
+                <input type="text"
+                       th:field="*{name}"
+                       placeholder="Contoh: Fresh"
+                       class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg shadow">
+                    Simpan
+                </button>
+
+                <a th:href="@{/admin/categories}"
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-3 rounded-lg">
+                    Kembali
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

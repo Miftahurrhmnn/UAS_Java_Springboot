@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Perfume - ScentMatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Navbar -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <a th:href="@{/}" class="text-2xl font-bold text-blue-600">ScentMatch</a>
+
+        <nav class="flex items-center gap-6 text-sm font-medium">
+            <a th:href="@{/}" class="text-gray-700 hover:text-blue-600">Home</a>
+            <a th:href="@{/perfumes}" class="text-blue-600 font-semibold">Perfumes</a>
+        </nav>
+    </div>
+</header>
+
+<section class="max-w-7xl mx-auto px-4 py-12">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Daftar Perfume</h1>
+        <p class="text-gray-500 mt-1">Temukan berbagai parfum favoritmu di sini.</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(perfumes)}"
+         class="bg-white rounded-2xl shadow p-10 text-center text-gray-500">
+        Belum ada data parfum.
+    </div>
+
+    <div th:unless="${#lists.isEmpty(perfumes)}"
+         class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+        <div th:each="perfume : ${perfumes}"
+             class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-gray-100">
+
+            <!-- Image -->
+            <div class="h-56 bg-gray-100 flex items-center justify-center overflow-hidden">
+                <img th:if="${perfume.imageUrl != null and !#strings.isEmpty(perfume.imageUrl)}"
+                     th:src="${perfume.imageUrl}"
+                     th:alt="${perfume.name}"
+                     class="w-full h-full object-cover">
+
+                <div th:unless="${perfume.imageUrl != null and !#strings.isEmpty(perfume.imageUrl)}"
+                     class="text-gray-400 text-sm">
+                    No Image
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
+                          th:text="${perfume.category != null ? perfume.category.name : 'No Category'}"></span>
+                    <span class="text-xs bg-pink-100 text-pink-700 px-3 py-1 rounded-full"
+                          th:text="${perfume.gender != null ? perfume.gender : 'Unisex'}"></span>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-800 mb-1" th:text="${perfume.name}"></h3>
+                <p class="text-sm text-gray-500 mb-3"
+                   th:text="${perfume.brand != null ? perfume.brand.name : 'No Brand'}"></p>
+
+                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                    <p>
+                        <span class="font-medium">Size:</span>
+                        <span th:text="${perfume.sizeMl != null ? perfume.sizeMl + ' ml' : '-'}"></span>
+                    </p>
+                    <p>
+                        <span class="font-medium">Price:</span>
+                        <span th:text="${perfume.price != null ? 'Rp ' + perfume.price : '-'}"></span>
+                    </p>
+                </div>
+
+                <a th:href="@{/perfumes/{id}(id=${perfume.id})}"
+                   class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-3 rounded-lg transition">
+                    Lihat Detail
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-white border-t mt-10">
+    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
+        © 2026 ScentMatch — Temukan aroma favoritmu.
+    </div>
+</footer>
+
+</body>
+</html>

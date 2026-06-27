@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ScentMatch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+<!-- Navbar -->
+<nav class="bg-gray-900 text-white shadow">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+        <h1 class="text-2xl font-bold">
+            🌸 ScentMatch
+        </h1>
+
+        <a href="/admin"
+           class="bg-amber-500 hover:bg-amber-600 px-4 py-2 rounded-lg font-semibold transition">
+            Login Admin
+        </a>
+
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-12 text-center">
+
+        <h2 class="text-4xl font-bold text-gray-800">
+            Temukan Parfum Favoritmu
+        </h2>
+
+        <p class="mt-3 text-gray-500">
+            Koleksi parfum original dengan berbagai aroma terbaik.
+        </p>
+
+    </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- Alert -->
+    <div th:if="${success}"
+         class="mb-5 bg-green-100 text-green-700 p-4 rounded-lg"
+         th:text="${success}">
+    </div>
+
+    <div th:if="${error}"
+         class="mb-5 bg-red-100 text-red-700 p-4 rounded-lg"
+         th:text="${error}">
+    </div>
+
+    <!-- Empty -->
+    <div th:if="${#lists.isEmpty(perfumes)}"
+         class="bg-white rounded-lg shadow p-10 text-center">
+
+        <h3 class="text-xl font-semibold text-gray-700">
+            Belum ada parfum tersedia.
+        </h3>
+
+    </div>
+
+    <!-- List Produk -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+         th:if="${!#lists.isEmpty(perfumes)}">
+
+        <div th:each="perfume : ${perfumes}"
+             class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+
+            <!-- Gambar -->
+            <img
+                    th:src="${perfume.imageUrl != null and !#strings.isEmpty(perfume.imageUrl) ? perfume.imageUrl : 'https://placehold.co/400x400?text=No+Image'}"
+                    class="w-full h-64 object-cover">
+
+            <!-- Isi Card -->
+            <div class="p-5">
+
+                <p class="text-sm text-gray-500"
+                   th:text="${perfume.brand.name}">
+                    Brand
+                </p>
+
+                <h3 class="text-xl font-bold mt-1"
+                    th:text="${perfume.name}">
+                    Nama
+                </h3>
+
+                <div class="mt-3 space-y-1 text-sm text-gray-600">
+
+                    <p>
+                        <b>Kategori :</b>
+                        <span th:text="${perfume.category.name}"></span>
+                    </p>
+
+                    <p>
+                        <b>Gender :</b>
+                        <span th:text="${perfume.gender}"></span>
+                    </p>
+
+                    <p>
+                        <b>Ukuran :</b>
+                        <span th:text="${perfume.sizeMl}"></span> ml
+                    </p>
+
+                </div>
+
+                <div class="mt-4">
+
+                    <p class="text-2xl font-bold text-gray-800"
+                       th:text="'Rp ' + ${#numbers.formatDecimal(perfume.price,0,'POINT',0,'COMMA')}">
+                    </p>
+
+                </div>
+
+                <!-- Stock -->
+                <div class="mt-3">
+
+                    <span
+                            th:if="${perfume.stock>0}"
+                            class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+
+                        Stok :
+                        <span th:text="${perfume.stock}"></span>
+
+                    </span>
+
+                    <span
+                            th:if="${perfume.stock<=0}"
+                            class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+
+                        Sold Out
+
+                    </span>
+
+                </div>
+
+                <!-- Description -->
+                <p class="text-sm text-gray-500 mt-4 line-clamp-3"
+                   th:text="${perfume.description}">
+                </p>
+
+                <!-- Button -->
+                <form class="mt-5"
+                      th:action="@{/buy/{id}(id=${perfume.id})}"
+                      method="post">
+
+                    <button
+                            th:disabled="${perfume.stock<=0}"
+                            class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-lg disabled:bg-gray-400">
+
+                        <span th:text="${perfume.stock>0?'Beli Sekarang':'Sold Out'}"></span>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="bg-white border-t mt-10">
+
+    <div class="max-w-7xl mx-auto py-6 text-center text-gray-500">
+
+        © 2026 ScentMatch - Perfume Recommendation System
+
+    </div>
+
+</footer>
+
+</body>
+</html>

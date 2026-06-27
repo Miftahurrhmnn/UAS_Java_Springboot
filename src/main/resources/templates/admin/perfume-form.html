@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Perfume Form</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body{
+            font-family:'Inter',sans-serif;
+        }
+    </style>
+
+</head>
+
+<body class="bg-slate-100">
+
+<div class="max-w-6xl mx-auto py-10 px-6">
+
+    <!-- Header -->
+    <div class="mb-8">
+
+        <h1 class="text-3xl font-bold text-slate-800">
+
+            <span th:if="${perfume.id == null}">
+                Add New Perfume
+            </span>
+
+            <span th:unless="${perfume.id == null}">
+                Edit Perfume
+            </span>
+
+        </h1>
+
+        <p class="text-gray-500 mt-1">
+            Manage perfume information.
+        </p>
+
+    </div>
+
+    <form
+            th:action="${perfume.id == null}
+            ? @{/admin/perfumes/save}
+            : @{/admin/perfumes/update/{id}(id=${perfume.id})}"
+
+            th:object="${perfume}"
+            method="post"
+
+            class="bg-white rounded-2xl shadow-lg p-8 space-y-8">
+
+        <!-- Basic Information -->
+
+        <div>
+
+            <h2 class="text-xl font-semibold mb-5 text-slate-700">
+                Basic Information
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Name -->
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Perfume Name
+                    </label>
+
+                    <input
+                            type="text"
+                            th:field="*{name}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+
+                            placeholder="Bleu de Chanel"/>
+
+                </div>
+
+                <!-- Price -->
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Price
+                    </label>
+
+                    <input
+                            type="number"
+                            th:field="*{price}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+
+                            placeholder="1500000"/>
+
+                </div>
+
+                <!-- Size -->
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Size (ml)
+                    </label>
+
+                    <input
+                            type="number"
+                            th:field="*{sizeMl}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"/>
+
+                </div>
+
+                <!-- Stock -->
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Stock
+                    </label>
+
+                    <input
+                            type="number"
+                            th:field="*{stock}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"/>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Brand Category -->
+
+        <div>
+
+            <h2 class="text-xl font-semibold mb-5 text-slate-700">
+                Brand & Category
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Brand -->
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Brand
+                    </label>
+
+                    <select
+                            th:field="*{brand.id}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+
+                        <option value="">Choose Brand</option>
+
+                        <option
+                                th:each="brand : ${brands}"
+                                th:value="${brand.id}"
+                                th:text="${brand.name}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- Category -->
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Category
+                    </label>
+
+                    <select
+                            th:field="*{category.id}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+
+                        <option value="">Choose Category</option>
+
+                        <option
+                                th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Fragrance -->
+
+        <div>
+
+            <h2 class="text-xl font-semibold mb-5 text-slate-700">
+                Fragrance Details
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Gender
+                    </label>
+
+                    <input
+                            type="text"
+                            th:field="*{gender}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3"/>
+
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Top Notes
+                    </label>
+
+                    <input
+                            type="text"
+                            th:field="*{topNotes}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3"/>
+
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Middle Notes
+                    </label>
+
+                    <input
+                            type="text"
+                            th:field="*{middleNotes}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3"/>
+
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Base Notes
+                    </label>
+
+                    <input
+                            type="text"
+                            th:field="*{baseNotes}"
+
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3"/>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Image -->
+
+        <div>
+
+            <label class="block mb-2 text-sm font-medium">
+                Image URL
+            </label>
+
+            <input
+                    type="text"
+                    th:field="*{imageUrl}"
+
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3"
+
+                    placeholder="https://"/>
+
+        </div>
+
+        <!-- Description -->
+
+        <div>
+
+            <label class="block mb-2 text-sm font-medium">
+                Description
+            </label>
+
+            <textarea
+
+                    rows="5"
+
+                    th:field="*{description}"
+
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3"></textarea>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="flex justify-end gap-4 pt-4 border-t">
+
+            <a
+                    th:href="@{/admin/perfumes}"
+
+                    class="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
+
+                Cancel
+
+            </a>
+
+            <button
+                    type="submit"
+
+                    class="bg-indigo-600 hover:bg-indigo-700 transition text-white px-7 py-3 rounded-lg shadow">
+
+                Save Perfume
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>
