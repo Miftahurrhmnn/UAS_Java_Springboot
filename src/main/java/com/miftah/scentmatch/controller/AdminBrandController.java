@@ -35,7 +35,7 @@ public class AdminBrandController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteBrand(Long id) {
+    public String deleteBrand(@PathVariable Long id) {
         brandService.deleteBrand(id);
         return "redirect:/admin/brands";
     }
